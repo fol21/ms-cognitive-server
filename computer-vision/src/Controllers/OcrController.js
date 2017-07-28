@@ -24,7 +24,7 @@ class OcrController{
      * @memberOf Controller
      */
     init(router){
-        router.post('/ocr',bodyParser.Json(), this.toBase64Middle, this. ocrMiddle, this.sendJson);
+        router.post('/ocr',bodyParser.json(), this.toBase64Middle, this. ocrMiddle, this.sendJson);
         msCVApi.init(config.msComputerVision.key1);
         return router;
     }
@@ -74,4 +74,4 @@ class OcrController{
 }
 
 //Returns a singleton when call for require
-module.exports = OcrController();
+module.exports = new OcrController();

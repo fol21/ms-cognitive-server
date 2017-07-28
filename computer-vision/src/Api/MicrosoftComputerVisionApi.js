@@ -124,6 +124,7 @@ class MicrosoftComputerVisionApi {
             "body": data
         }).then((result) => {
             console.log(JSON.stringify(result));
+            return result;
         }).catch((err) => {
             throw err;
         })
