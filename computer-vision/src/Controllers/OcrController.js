@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const base64Business = require('../Business/Base64Business.js');
-const msCVApi = require('../Api/MicrosoftComputerVisionApi.js'); 
+const msCVApi = require('../Api/MicrosoftComputerVisionApi.js');
 const config = require('../../resources/config.json')
 
 const app = express();
@@ -13,7 +13,7 @@ const app = express();
  * 
  * @class Controller
  */
-class OcrController{
+class OcrController {
 
     /**
      * Begin Application 
@@ -23,14 +23,14 @@ class OcrController{
      * 
      * @memberOf Controller
      */
-    init(router){
-        router.post('/ocr',bodyParser.json(), this.toBase64Middle, this. ocrMiddle, this.sendJson);
+    init(router) {
+        router.post('/ocr', bodyParser.json(), this.toBase64Middle, this.ocrMiddle, this.sendJson);
         msCVApi.init(config.msComputerVision.key1);
         return router;
     }
 
-    
-     /**
+
+    /**
      * Middleware for prossessing income data
      * It can be repplicated for more steps
      * @param {any} req 
@@ -39,7 +39,7 @@ class OcrController{
      * 
      * @memberOf Controller
      */
-    toBase64Middle(req, res, next){ 
+    toBase64Middle(req, res, next) {
         res.base64 = base64Business.decodeToBytes(req.body.base64);
         next(); // pass to next middleware
     }
@@ -53,12 +53,12 @@ class OcrController{
      * 
      * @memberOf Controller
      */
-    ocrMiddle(req, res, next){ 
-        res.result = msCVApi.ocr(res.base64);
+    ocrMiddle(req, res, next) {
+        res.ocrPromise = msCVApi.ocr(res.base64);
         next(); // pass to next middleware
     }
-   
-    
+
+
     /**
      * Callback to send the response
      * 
@@ -67,10 +67,15 @@ class OcrController{
      * 
      * @memberOf Controller
      */
-    sendJson(req, res){
-        res.json(res.result);
+    sendJson(req, res) {
+        res.ocrPromise.then((result) => {
+            console.log(result)
+            res.json(result);
+        }).catch((err) => {
+            throw err
+        });
     }
-    
+
 }
 
 //Returns a singleton when call for require

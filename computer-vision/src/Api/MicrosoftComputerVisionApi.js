@@ -1,4 +1,4 @@
-const microsofComputerVision = require("microsoft-computer-vision");
+const microsofComputerVision = require("../Microsoft/MicrosoftComputerVision.js");
 
 class MicrosoftComputerVisionApi {
 
@@ -67,7 +67,7 @@ class MicrosoftComputerVisionApi {
      * @memberOf MicrosoftComputerVisionApi
      */
     analyze(data) {
-        microsofComputerVision.analyzeImage({
+        microsofComputerVision.analyze({
             "Ocp-Apim-Subscription-Key": this.subscriptionKey,
             "request-origin": "westus",
             "language": "en",
@@ -111,23 +111,31 @@ class MicrosoftComputerVisionApi {
      *   } 
      * 
      * @param {any} data 
-     * 
+     * @returns {Promise} thenable
      * @memberOf MicrosoftComputerVisionApi
      */
     ocr(data) {
-        microsofComputerVision.orcImage({
-            "Ocp-Apim-Subscription-Key": this.subscriptionKey,
-            "request-origin": "westus",
-            "language": "en",
-            "detect-orientation": true,
-            "content-type": "application/octet-stream",
-            "body": data
-        }).then((result) => {
+
+        let options = {
+            SubscriptionKey: this.subscriptionKey,
+            location: "westcentralus",
+            language: "en",
+            detectOrientation: true,
+        };
+
+        if (typeof data == "string"){
+            options.ContentType = "application/json";
+            options.body =  data;
+        }
+          options.ContentType = 'multipart/form-data';
+          options.body =  data;
+
+       return microsofComputerVision.ocr(options).then((result) => {
             console.log(JSON.stringify(result));
             return result;
         }).catch((err) => {
-            throw err;
-        })
+            return err;
+        });
     }
 
 }

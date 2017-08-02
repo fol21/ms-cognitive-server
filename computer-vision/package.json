@@ -12,7 +12,7 @@
     "base-64": "^0.1.0",
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
-    "microsoft-computer-vision": "^0.3.2",
+    "request": "^2.81.0",
     "utf8": "^2.1.2"
   }
 }
