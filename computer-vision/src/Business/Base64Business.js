@@ -24,11 +24,11 @@ class Base64Business{
     }
 
     decodeToBytes(data){
-        return base64.decode(data);
+        return new Buffer(data,'base64');
     }
 
     decodeToText(data){
-        return utf8.decode(base64.decode(data));
+        return base64.decode(data);
     }
     
 }
