@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const base64Business = require('../Business/Base64Business.js');
+const base64 = require('../Utils/Base64.js.js');
 const msCVApi = require('../Api/MicrosoftComputerVisionApi.js');
 const config = require('../../resources/config.json')
 
@@ -40,7 +40,7 @@ class OcrController {
      * @memberOf Controller
      */
     toBase64Middle(req, res, next) {
-        res.base64 = base64Business.decodeToBytes(req.body.base64);
+        res.base64 = base64.decodeToBytes(req.body.base64);
         next(); // pass to next middleware
     }
 

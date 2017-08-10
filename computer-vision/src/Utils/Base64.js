@@ -6,7 +6,7 @@ const base64Stream = require('base64-stream');
 const utf8 = require('utf8');
 
 
-class Base64Business{
+class Base64{
 
     encode(data){
         if(typeof data == "string"){
@@ -33,4 +33,4 @@ class Base64Business{
     
 }
 
-module.exports = new Base64Business();
+module.exports = new Base64();
