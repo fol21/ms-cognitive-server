@@ -1,11 +1,13 @@
 const express = require('express');
+const multer  = require('multer')
 const bodyParser = require('body-parser');
 
-const base64 = require('../Utils/Base64.js.js');
+const base64 = require('../Utils/Base64.js');
 const msCVApi = require('../Api/MicrosoftComputerVisionApi.js');
 const config = require('../../resources/config.json')
 
 const app = express();
+const upload = multer();
 
 
 /**
@@ -24,9 +26,26 @@ class OcrController {
      * @memberOf Controller
      */
     init(router) {
-        router.post('/ocr', bodyParser.json(), this.toBase64Middle, this.ocrMiddle, this.sendJson);
+        router.post('/ocr',upload.single('file'),bodyParser.json(),this.fileMiddle, this.base64Middle, this.ocrMiddle, this.sendJson);
         msCVApi.init(config.msComputerVision.key1);
         return router;
+    }
+
+
+
+     /**
+     * Middleware for prossessing income data
+     * It can be repplicated for more steps
+     * @param {any} req 
+     * @param {any} res 
+     * @param {any} next 
+     * 
+     * @memberOf Controller
+     */
+    fileMiddle(req, res, next) {
+        if(req.hasOwnProperty('file') || req.hasOwnProperty('files'))
+            res.content = req.file.buffer;
+        next(); // pass to next middleware
     }
 
 
@@ -39,8 +58,9 @@ class OcrController {
      * 
      * @memberOf Controller
      */
-    toBase64Middle(req, res, next) {
-        res.base64 = base64.decodeToBytes(req.body.base64);
+    base64Middle(req, res, next) {
+        if(req.body.__proto__ != null)
+            res.content = base64.decodeToBytes(req.body.base64);
         next(); // pass to next middleware
     }
 
@@ -54,7 +74,7 @@ class OcrController {
      * @memberOf Controller
      */
     ocrMiddle(req, res, next) {
-        res.ocrPromise = msCVApi.ocr(res.base64);
+        res.ocrPromise = msCVApi.ocr(res.content);
         next(); // pass to next middleware
     }
 
