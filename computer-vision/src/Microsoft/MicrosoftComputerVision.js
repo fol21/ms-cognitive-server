@@ -15,10 +15,13 @@ class MicrosoftComputerVision {
    *     language: "en",
    *     detectOrientation: true,
    *     ContentType: ["application/json, application/octet-stream"],
-   *     body:[{"url":"http://example.com/images/test.jpg"}, binary_data]
+   *     body:{"url":"http://example.com/images/test.jpg"} or binary_data
    * }
    * @param {Object} options 
    * @returns {Promise} promise
+   * OCR results in the hierarchy of region/line/word. The results include text, bounding box for regions, lines and words.
+   * Object properties => https://westus.dev.cognitive.microsoft.com/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fc
+   * 
    * @memberof MicrosoftComputerVisionBusiness
    */
   ocr(opt) {
@@ -34,7 +37,7 @@ class MicrosoftComputerVision {
           'Ocp-Apim-Subscription-Key': opt.SubscriptionKey,
           'content-type': ""
         },
-        body: '{"apt":"";\n}'
+        body: ""
       };
 
       //Building request body based in the opt object content
@@ -60,7 +63,6 @@ class MicrosoftComputerVision {
       //request
       request(options, function (error, response, body) {
         if (error) reject(error);
-        console.log(body);
         resolve(body);
       });
     });

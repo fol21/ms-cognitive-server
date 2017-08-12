@@ -1,137 +1,58 @@
 const microsofComputerVision = require("../Microsoft/MicrosoftComputerVision.js");
+const base64 = require('../Utils/Base64.js');
 
 class MicrosoftComputerVisionApi {
 
     /**
      * Initialize API
      * 
-     * @param {string} subscriptionKey 
+     * @param {Object} subscriptionKey 
      * 
      * @memberOf MicrosoftComputerVisionApi
      */
-    init(subscriptionKey) {
-        this.subscriptionKey = subscriptionKey;
+    init(options) {
+        this.subscriptionKey = options.subscriptionKey;
+        this.location = options.location;
+        this.language = options.language;
     }
-
-    /**
-     * Image Analysis
-     * 
-     * {
-     *   "categories": [
-     *       {
-     *       "name": "outdoor_water",
-     *       "score": 0.9921875
-     *       }
-     *   ],
-     *   "description": {
-     *       "tags": [
-     *       "nature",
-     *       "water",
-     *       "waterfall",
-     *       "outdoor",
-     *       "rock",
-     *       "mountain",
-     *       "rocky",
-     *       "grass",
-     *       "hill",
-     *       "top",
-     *       "field"
-     *       ],
-     *       "captions": [
-     *       {
-     *           "text": "a large waterfall over a rocky cliff",
-     *           "confidence": 0.9165146827843689
-     *       }
-     *       ]
-     *   },
-     *   "requestId": "63d3c630-7f3d-43d7-8a97-143012fc53f4",
-     *   "metadata": {
-     *       "width": 1280,
-     *       "height": 959,
-     *       "format": "Jpeg"
-     *   },
-     *   "color": {
-     *       "dominantColorForeground": "Grey",
-     *       "dominantColorBackground": "Green",
-     *       "dominantColors": [
-     *       "Grey",
-     *       "Green"
-     *       ],
-     *       "accentColor": "4D5E2F",
-     *       "isBWImg": false
-     *   }
-     *  }                         
-     * 
-     * @param {any} data 
-     * 
-     * @memberOf MicrosoftComputerVisionApi
-     */
-    analyze(data) {
-        microsofComputerVision.analyze({
-            "Ocp-Apim-Subscription-Key": this.subscriptionKey,
-            "request-origin": "westus",
-            "language": "en",
-            "detect-orientation": true,
-            "content-type": "application/octet-stream",
-            "body": data
-        }).then((result) => {
-            console.log(JSON.stringify(result));
-        }).catch((err) => {
-            throw err;
-        })
-    }
-
 
     /**
      * Optical character Recoginition call
      * 
-     *   // { 
-     *       "language": "en", 
-     *        "orientation": "Up", 
-     *       "regions": [ 
-     *           { 
-     *               "boundingBox": "7,55,605,387", 
-     *               "lines": [ 
-     *                  { 
-     *                       "boundingBox": "7,55,603,65", 
-     *                      "words": [ 
-     *                           { 
-     *                               "boundingBox": "7,59,291,61", 
-     *                               "text": "HOME:" 
-     *                           }, 
-     *                           { 
-     *                               "boundingBox": "326,55,284,65", 
-     *                                                    } 
-     *                       ] 
-     *                   }, 
-     *                   ... 
-     *               ] 
-     *          } 
-     *       ] 
-     *   } 
-     * 
      * @param {any} data 
+     * @param {bool} [orientation] 
+     * 
+     * data could be a url string, bas64 string or bynary data
+     * 
+     * 
      * @returns {Promise} thenable
      * @memberOf MicrosoftComputerVisionApi
      */
-    ocr(data) {
+    ocr(data, orientation=true) {
 
         let options = {
             SubscriptionKey: this.subscriptionKey,
-            location: "westcentralus",
-            language: "en",
-            detectOrientation: true,
+            location: this.location,
+            language: this.language,
+            detectOrientation: orientation,
         };
 
-        if (typeof data == "string"){
-            options.ContentType = "application/json";
-            options.body =  data;
-        }
-          options.ContentType = 'multipart/form-data';
-          options.body =  data;
+        if (typeof data == "string") {
 
-       return microsofComputerVision.ocr(options).then((result) => {
-            console.log(JSON.stringify(result));
+            if ((new RegExp("^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$"))
+                .test(data)) {
+                options.ContentType = 'multipart/form-data';
+                options.body = base64.decodeToBytes(data);
+            } else {
+                options.ContentType = "application/json";
+                options.body = data;
+            }
+        } else {
+            options.ContentType = 'multipart/form-data';
+            options.body = data;
+        }
+
+        return microsofComputerVision.ocr(options).then((result) => {
             return result;
         }).catch((err) => {
             return err;

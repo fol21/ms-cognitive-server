@@ -1,5 +1,7 @@
 {
     "msComputerVision":{
+        "location":"westcentralus",
+        "language":"en",
         "key1":"311b7a4347cb47ca9899d5f4ee98ba35",
         "key2":"cf48a2505b6e4d5883cfa5cbd4fd46cd"
     },

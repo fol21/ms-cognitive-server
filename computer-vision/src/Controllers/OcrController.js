@@ -1,12 +1,9 @@
-const express = require('express');
 const multer  = require('multer')
 const bodyParser = require('body-parser');
 
-const base64 = require('../Utils/Base64.js');
 const msCVApi = require('../Api/MicrosoftComputerVisionApi.js');
 const config = require('../../resources/config.json')
 
-const app = express();
 const upload = multer();
 
 
@@ -27,14 +24,18 @@ class OcrController {
      */
     init(router) {
         router.post('/ocr',upload.single('file'),bodyParser.json(),this.fileMiddle, this.base64Middle, this.ocrMiddle, this.sendJson);
-        msCVApi.init(config.msComputerVision.key1);
+        msCVApi.init({
+            subscriptionKey:config.msComputerVision.key1,
+            location:config.msComputerVision.location,
+            language:config.msComputerVision.language
+        });
         return router;
     }
 
 
 
      /**
-     * Middleware for prossessing income data
+     * Process image bynary data
      * It can be repplicated for more steps
      * @param {any} req 
      * @param {any} res 
@@ -43,14 +44,17 @@ class OcrController {
      * @memberOf Controller
      */
     fileMiddle(req, res, next) {
-        if(req.hasOwnProperty('file') || req.hasOwnProperty('files'))
+        req.hasFile = false;
+        if(req.hasOwnProperty('file') || req.hasOwnProperty('files')){
+            req.hasFile = true;
             res.content = req.file.buffer;
+        }
         next(); // pass to next middleware
     }
 
 
     /**
-     * Middleware for prossessing income data
+     * Process incoming base64 string
      * It can be repplicated for more steps
      * @param {any} req 
      * @param {any} res 
@@ -59,13 +63,13 @@ class OcrController {
      * @memberOf Controller
      */
     base64Middle(req, res, next) {
-        if(req.body.__proto__ != null)
-            res.content = base64.decodeToBytes(req.body.base64);
+        if(!(req.hasFile))
+            res.content = req.body.base64;
         next(); // pass to next middleware
     }
 
     /**
-     * Middleware for prossessing income data
+     * OCR processing of content data
      * It can be repplicated for more steps
      * @param {any} req 
      * @param {any} res 
@@ -89,10 +93,9 @@ class OcrController {
      */
     sendJson(req, res) {
         res.ocrPromise.then((result) => {
-            console.log(result)
-            res.json(result);
+            res.json(JSON.parse(result));
         }).catch((err) => {
-            throw err
+            console.log(err)
         });
     }
 
