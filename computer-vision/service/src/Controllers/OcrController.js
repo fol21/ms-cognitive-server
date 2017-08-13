@@ -24,11 +24,7 @@ class OcrController {
      */
     init(router) {
         router.post('/ocr',upload.single('file'),bodyParser.json(),this.fileMiddle, this.base64Middle, this.ocrMiddle, this.sendJson);
-        msCVApi.configure({
-            subscriptionKey:config.msComputerVision.key1,
-            location:config.msComputerVision.location,
-            language:config.msComputerVision.language
-        });
+        msCVApi.configure(config.msComputerVision.key1,config.msComputerVision.location);
         return router;
     }
 
@@ -78,7 +74,7 @@ class OcrController {
      * @memberOf Controller
      */
     ocrMiddle(req, res, next) {
-        res.ocrPromise = msCVApi.ocr(res.content);
+        res.ocrPromise = msCVApi.ocr(res.content, {language:"en", detectOrientation:true});
         next(); // pass to next middleware
     }
 
