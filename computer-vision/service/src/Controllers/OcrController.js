@@ -24,7 +24,7 @@ class OcrController {
      */
     init(router) {
         router.post('/ocr',upload.single('file'),bodyParser.json(),this.fileMiddle, this.base64Middle, this.ocrMiddle, this.sendJson);
-        msCVApi.init({
+        msCVApi.configure({
             subscriptionKey:config.msComputerVision.key1,
             location:config.msComputerVision.location,
             language:config.msComputerVision.language

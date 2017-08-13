@@ -4,13 +4,19 @@ const base64 = require('../Utils/Base64.js');
 class MicrosoftComputerVisionApi {
 
     /**
-     * Initialize API
+     * Configure API with options
      * 
-     * @param {Object} subscriptionKey 
+     * @param {Object} options - mandatory configuration object
+     * 
+     * options = {
+     *  subscriptionKey:
+     *  location:
+     *  language:
+     * } 
      * 
      * @memberOf MicrosoftComputerVisionApi
      */
-    init(options) {
+    configure(options) {
         this.subscriptionKey = options.subscriptionKey;
         this.location = options.location;
         this.language = options.language;
@@ -20,7 +26,7 @@ class MicrosoftComputerVisionApi {
      * Optical character Recoginition call
      * 
      * @param {any} data 
-     * @param {bool} [orientation] 
+     * @param {bool} [orientation=true] 
      * 
      * data could be a url string, bas64 string or bynary data
      * 

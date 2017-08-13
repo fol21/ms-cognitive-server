@@ -1,13 +1,13 @@
 {
-  "name": "ms-computer-vision-api-radix",
-  "version": "1.0.0",
-  "description": "Radix Engenharia & Software Microsoft Computer Vision Service for NodeJs",
+  "name": "ms-computer-vision-service",
+  "version": "0.1.0",
+  "description": "Microsoft Computer Vision Service for NodeJs",
   "main": "index.js",
   "scripts": {
     "start": "node index.js ",
     "test": "nodemon index.js"
   },
-  "author": "Fernando Lima <fernando.lima@radixeng.com.br>",
+  "author": "Fernando Lima <folivelima@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "base-64": "^0.1.0",
