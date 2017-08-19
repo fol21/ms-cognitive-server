@@ -22,11 +22,12 @@ class MicrosoftComputerVision {
    * 
    * @memberof MicrosoftComputerVision
    */
-  analyse(opt) {
+  analyze(opt) {
     return new Promise((resolve, reject) => {
       let options = {
         method: 'POST',
         url: `https://${opt.location}.api.cognitive.microsoft.com/vision/v1.0/analyze`,
+        qs: {},
         headers: {
           'Ocp-Apim-Subscription-Key': opt.SubscriptionKey,
           'content-type': ""
@@ -84,14 +85,15 @@ class MicrosoftComputerVision {
       let options = {
         method: 'POST',
         url: `https://${opt.location}.api.cognitive.microsoft.com/vision/v1.0/describe`,
+        qs: {},
         headers: {
           'Ocp-Apim-Subscription-Key': opt.SubscriptionKey,
           'content-type': ""
         },
         body: ""
       };
-      
-      if(opt.maxCandidates) options.qs.maxCandidates = params.maxCandidates;
+
+      if (opt.maxCandidates) options.qs.maxCandidates = params.maxCandidates;
 
       //Building request body based in the opt object content
       switch (opt.ContentType) {
@@ -160,6 +162,10 @@ class MicrosoftComputerVision {
             url: opt.body
           };
           options.json = true;
+          break;
+        case "multipart/form-data":
+          options.headers['content-type'] = "application/octet-stream";
+          options.body = opt.body;
           break;
         case "application/octet-stream":
           options.headers['content-type'] = "application/octet-stream";
@@ -239,7 +245,7 @@ class MicrosoftComputerVision {
         body: ""
       };
 
-      if(opt.smartCropping) options.smartCropping = opt.smartCropping;
+      if (opt.smartCropping) options.qs.smartCropping = opt.smartCropping;
 
       //Building request body based in the opt object content
       switch (opt.ContentType) {
@@ -249,6 +255,10 @@ class MicrosoftComputerVision {
             url: opt.body
           };
           options.json = true;
+          break;
+        case "multipart/form-data":
+          options.headers['content-type'] = "application/octet-stream";
+          options.body = opt.body;
           break;
         case "application/octet-stream":
           options.headers['content-type'] = "application/octet-stream";
@@ -425,16 +435,16 @@ class MicrosoftComputerVision {
       let options = {
         method: 'POST',
         url: `https://${opt.location}.api.cognitive.microsoft.com/vision/v1.0/ocr`,
-        qs: {
-          language: opt.language,
-          detectOrientation: opt.detectOrientation
-        },
+        qs: {},
         headers: {
           'Ocp-Apim-Subscription-Key': opt.SubscriptionKey,
           'content-type': ""
         },
         body: ""
       };
+
+      if (opt.language) options.qs.language = opt.language;
+      if (opt.detectOrientation) options.qs.detectOrientation = opt.detectOrientation;
 
       //Building request body based in the opt object content
       switch (opt.ContentType) {

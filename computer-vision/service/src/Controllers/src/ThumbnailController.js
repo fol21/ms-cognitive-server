@@ -1,8 +1,8 @@
 const multer  = require('multer')
 const bodyParser = require('body-parser');
 
-const msCVApi = require('../Api/MicrosoftComputerVisionApi.js');
-const config = require('../../resources/config.json')
+const msCVApi = require('../../Api/MicrosoftComputerVisionApi.js');
+const config = require('../../../resources/config.json')
 
 const upload = multer();
 
@@ -12,7 +12,7 @@ const upload = multer();
  * 
  * @class Controller
  */
-class OcrController {
+class ThumbnailController {
 
     /**
      * Begin Application 
@@ -23,7 +23,7 @@ class OcrController {
      * @memberOf Controller
      */
     init(router) {
-        router.post('/ocr',upload.single('file'),bodyParser.json(),this.fileMiddle, this.base64Middle, this.ocrMiddle, this.sendJson);
+        router.post('/thumbnail',upload.single('file'),bodyParser.json(),this.fileMiddle, this.base64Middle, this.analyzeMiddle, this.sendJson);
         msCVApi.configure(config.msComputerVision.key1,config.msComputerVision.location);
         return router;
     }
@@ -65,7 +65,7 @@ class OcrController {
     }
 
     /**
-     * OCR processing of content data
+     * Analyze processing of content data
      * It can be repplicated for more steps
      * @param {any} req 
      * @param {any} res 
@@ -73,8 +73,8 @@ class OcrController {
      * 
      * @memberOf Controller
      */
-    ocrMiddle(req, res, next) {
-        res.ocrPromise = msCVApi.ocr(res.content, {language:"en", detectOrientation:true});
+    analyzeMiddle(req, res, next) {
+        res.analyzePromise = msCVApi.thumbnail(res.content, {width: 514, height:  514, smartCropping: true});
         next(); // pass to next middleware
     }
 
@@ -88,8 +88,8 @@ class OcrController {
      * @memberOf Controller
      */
     sendJson(req, res) {
-        res.ocrPromise.then((result) => {
-            res.json(JSON.parse(result));
+        res.analyzePromise.then((result) => {
+            res.end(result,'binary');
         }).catch((err) => {
             console.log(err)
         });
@@ -98,4 +98,4 @@ class OcrController {
 }
 
 //Returns a singleton when call for require
-module.exports = new OcrController();
+module.exports = new ThumbnailController();

@@ -1,13 +1,8 @@
-const express = require('express');
+const service = require('./src/Service');
+const controllers = require('./src/Controllers');
+const config = require("./resources/config.json")
 
-const config =  require("./resources/config.json")
+service.initControllers(controllers);
+console.log("Added Computer Vision Controllers");
 
-const app = express();
-const OcrController = require('./src/Controllers/OcrController');
-
-
-
-  app.use('/computer-vision', OcrController.init(express.Router()));
-  app.listen(config.server.port, function () {
-    console.log('Listening to port ' + config.server.port.toString());
-  });
+service.listen(config.server.port);

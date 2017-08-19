@@ -34,7 +34,7 @@ class MicrosoftComputerVisionApi {
      * @returns {Promise} thenable
      * @memberOf MicrosoftComputerVisionApi
      */
-    analyse(data, params) {
+    analyze(data, params) {
 
         let options = {
             SubscriptionKey: this.subscriptionKey,
@@ -60,7 +60,7 @@ class MicrosoftComputerVisionApi {
             options.body = data;
         }
 
-        return microsofComputerVision.analyse(options).then((result) => {
+        return microsofComputerVision.analyze(options).then((result) => {
             return result;
         }).catch((err) => {
             return err;
