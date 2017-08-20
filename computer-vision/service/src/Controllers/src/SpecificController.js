@@ -12,7 +12,7 @@ const upload = multer();
  * 
  * @class Controller
  */
-class OperationController {
+class SpecificController {
 
     /**
      * Begin Application 
@@ -23,9 +23,45 @@ class OperationController {
      * @memberOf Controller
      */
     init(router) {
-        router.get('/operation',upload.single('file'), this.analyzeMiddle, this.sendJson);
+        router.post('/specific',upload.single('file'),bodyParser.json(),this.fileMiddle, this.base64Middle, this.analyzeMiddle, this.sendJson);
         msCVApi.configure(config.msComputerVision.key1,config.msComputerVision.location);
         return router;
+    }
+
+
+
+     /**
+     * Process image bynary data
+     * It can be repplicated for more steps
+     * @param {any} req 
+     * @param {any} res 
+     * @param {any} next 
+     * 
+     * @memberOf Controller
+     */
+    fileMiddle(req, res, next) {
+        req.hasFile = false;
+        if(req.hasOwnProperty('file') || req.hasOwnProperty('files')){
+            req.hasFile = true;
+            res.content = req.file.buffer;
+        }
+        next(); // pass to next middleware
+    }
+
+
+    /**
+     * Process incoming base64 string
+     * It can be repplicated for more steps
+     * @param {any} req 
+     * @param {any} res 
+     * @param {any} next 
+     * 
+     * @memberOf Controller
+     */
+    base64Middle(req, res, next) {
+        if(!(req.hasFile))
+            res.content = req.body.base64;
+        next(); // pass to next middleware
     }
 
     /**
@@ -38,7 +74,7 @@ class OperationController {
      * @memberOf Controller
      */
     analyzeMiddle(req, res, next) {
-        res.analyzePromise = msCVApi.operation(req.query.operationId);
+        res.analyzePromise = msCVApi.specific(res.content, {model:req.query.model});
         next(); // pass to next middleware
     }
 
@@ -62,4 +98,4 @@ class OperationController {
 }
 
 //Returns a singleton when call for require
-module.exports = new OperationController();
+module.exports = new SpecificController();

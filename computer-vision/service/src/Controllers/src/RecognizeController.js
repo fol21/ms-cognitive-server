@@ -74,7 +74,7 @@ class RecognizeController {
      * @memberOf Controller
      */
     analyzeMiddle(req, res, next) {
-        res.analyzePromise = msCVApi.recognize(res.content, {});
+        res.analyzePromise = msCVApi.recognize(res.content, {handwriting:req.query.handwriting});
         next(); // pass to next middleware
     }
 
@@ -89,7 +89,7 @@ class RecognizeController {
      */
     sendJson(req, res) {
         res.analyzePromise.then((result) => {
-            res.json(JSON.parse(result));
+            res.json({"operation-location":result});
         }).catch((err) => {
             console.log(err)
         });

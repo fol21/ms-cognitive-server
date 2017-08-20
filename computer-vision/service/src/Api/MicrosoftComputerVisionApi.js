@@ -237,7 +237,7 @@ class MicrosoftComputerVisionApi {
      * @returns {Promise} thenable
      * @memberOf MicrosoftComputerVisionApi
      */
-    models(id) {
+    models() {
 
         let options = {
             SubscriptionKey: this.subscriptionKey,
@@ -304,7 +304,7 @@ class MicrosoftComputerVisionApi {
      * @returns {Promise} thenable
      * @memberOf MicrosoftComputerVisionApi
      */
-    tag(data, params) {
+    tag(data) {
 
         let options = {
             SubscriptionKey: this.subscriptionKey,

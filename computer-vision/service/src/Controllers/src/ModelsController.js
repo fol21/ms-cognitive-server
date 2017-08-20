@@ -12,7 +12,7 @@ const upload = multer();
  * 
  * @class Controller
  */
-class OperationController {
+class ModelsController {
 
     /**
      * Begin Application 
@@ -23,7 +23,7 @@ class OperationController {
      * @memberOf Controller
      */
     init(router) {
-        router.get('/operation',upload.single('file'), this.analyzeMiddle, this.sendJson);
+        router.get('/models',upload.single('file'), this.analyzeMiddle, this.sendJson);
         msCVApi.configure(config.msComputerVision.key1,config.msComputerVision.location);
         return router;
     }
@@ -38,7 +38,7 @@ class OperationController {
      * @memberOf Controller
      */
     analyzeMiddle(req, res, next) {
-        res.analyzePromise = msCVApi.operation(req.query.operationId);
+        res.analyzePromise = msCVApi.models();
         next(); // pass to next middleware
     }
 
@@ -62,4 +62,4 @@ class OperationController {
 }
 
 //Returns a singleton when call for require
-module.exports = new OperationController();
+module.exports = new ModelsController();

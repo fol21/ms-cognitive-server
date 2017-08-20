@@ -143,7 +143,7 @@ class MicrosoftComputerVision {
     return new Promise((resolve, reject) => {
       let options = {
         method: 'POST',
-        url: `https://${opt.location}.api.cognitive.microsoft.com/vision/v1.0/recognizeText`,
+        url: `https://${opt.location}.api.cognitive.microsoft.com/vision/v1.0/RecognizeText`,
         qs: {
           handwriting: opt.handwriting
         },
@@ -179,7 +179,7 @@ class MicrosoftComputerVision {
       //request
       request(options, function (error, response, body) {
         if (error) reject(error);
-        resolve(body);
+        resolve(response.headers["operation-location"]);
       });
     });
   }
@@ -202,7 +202,7 @@ class MicrosoftComputerVision {
     return new Promise((resolve, reject) => {
       let options = {
         method: 'GET',
-        url: `https://${opt.location}.api.cognitive.microsoft.com/vision/v1.0/${opt.operationId}`,
+        url: `https://${opt.location}.api.cognitive.microsoft.com/vision/v1.0/textOperations/${opt.operationId}`,
         headers: {
           'Ocp-Apim-Subscription-Key': opt.SubscriptionKey,
         },
