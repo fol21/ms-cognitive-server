@@ -1,5 +1,5 @@
 {
-  "name": "ms-computer-vision-service",
+  "name": "microsoft-computer-vision-service",
   "version": "0.1.0",
   "description": "Microsoft Computer Vision Service for NodeJs",
   "main": "index.js",
