@@ -1,0 +1,24 @@
+{
+  "name": "microsoft-cognitive-services-computer-vision",
+  "version": "0.1.0",
+  "description": "Microsoft Computer Vision API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fol21/ms-cognitive-server.git"
+  },
+  "author": "Fernando Lima <folivelima@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fol21/ms-cognitive-server/issues"
+  },
+  "homepage": "https://github.com/fol21/ms-cognitive-server#readme",
+  "dependencies": {
+    "base-64": "^0.1.0",
+    "request": "^2.81.0",
+    "utf8": "^2.1.2"
+  }
+}
