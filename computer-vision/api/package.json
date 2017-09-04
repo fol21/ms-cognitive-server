@@ -1,5 +1,5 @@
 {
-  "name": "microsoft-cognitive-services-computer-vision",
+  "name": "microsoft-computer-vision-api",
   "version": "0.1.0",
   "description": "Microsoft Computer Vision API",
   "main": "index.js",
